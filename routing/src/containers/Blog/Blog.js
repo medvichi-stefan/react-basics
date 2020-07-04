@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 // import axios from 'axios';
-import {Route, NavLink, Switch} from 'react-router-dom';
+import {Route, NavLink, Switch, Redirect} from 'react-router-dom';
 
 import './Blog.css';
 import Posts from '../Posts/Posts';
 import NewPost from '../NewPost/NewPost';
-import FullPost from '../FullPost/FullPost';
 
 class Blog extends Component {
+    state = {
+        auth: false
+    }
 
     render () {
         return (
@@ -15,17 +17,19 @@ class Blog extends Component {
                 <header>
                     <nav>
                         <ul>
-                            <li><NavLink to="/" exact>Home</NavLink></li>
+                            <li><NavLink to="/posts" exact>Home</NavLink></li>
                             <li><NavLink to={{
                                 pathname: '/new-post'
                             }}>New Post</NavLink></li>
                         </ul>
                     </nav>
                 </header>
-                <Route path="/" exact component={Posts} />
+                
                 <Switch>
-                    <Route path="/new-post" exact component={NewPost} />
-                    <Route path="/:id" exact component={FullPost} />
+                    {this.state.auth ? <Route path="/new-post" component={NewPost} /> : null}
+                    <Route path="/posts" component={Posts} />
+                    <Route render={() => <h1>Not found</h1>}/>
+                    {/* <Redirect from="/" to="/posts" /> */}
                 </Switch>
             </div>
         );
